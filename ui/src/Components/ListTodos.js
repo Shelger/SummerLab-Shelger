@@ -1,5 +1,6 @@
 import { Button } from 'bootstrap';
 import React,{Fragment, useEffect, useState} from 'react';
+import EditTodo from './EditTodo'
 
 const ListTodos = () => {
 
@@ -22,15 +23,16 @@ const ListTodos = () => {
 
     const deleteTodo = async id => {
         try{
-            const deleteTodo = await fetch('http://localhost:8000/api/todos/${id}', {method: 'DELETE'});
+            const deleteTodo = await fetch(`http://localhost:8000/api/todos/${id}`, {method: 'DELETE'});
             console.log(deleteTodo)
+            setTodos(todos.filter(todo => todo.id !== id))
         } catch(err){
             console.log(err.message)
         }
     }
     return (
     <Fragment>
-        <table class='table mt-5 text-center'>
+        <table className='table mt-5 text-center'>
             <thead>
                 <tr>
                     <th>Title</th>
@@ -42,7 +44,9 @@ const ListTodos = () => {
                 {todos.map(todo => (
                     <tr key={todo.id}>
                         <td>{todo.title}</td>
-                        <td>Edit</td>
+                        <td>
+                            <EditTodo todo={todo}/>
+                        </td>
                         <td>
                         <button className='btn btn-danger' onClick={() => deleteTodo(todo.id)}>Delete</button>
                         </td>
